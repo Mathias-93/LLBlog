@@ -3,11 +3,23 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 
 export default function Auth() {
-  const [auth, setAuth] = useState(true);
+  const [authType, setAuthType] = useState(true);
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "",
+  });
 
-  return auth ? (
-    <Login auth={auth} setAuth={setAuth} />
+  return authType ? (
+    <Login
+      authType={authType}
+      setAuthType={setAuthType}
+      setLoginInfo={setLoginInfo}
+    />
   ) : (
-    <Register auth={auth} setAuth={setAuth} />
+    <Register
+      auth={authType}
+      setAuthType={setAuthType}
+      setLoginInfo={setLoginInfo}
+    />
   );
 }
