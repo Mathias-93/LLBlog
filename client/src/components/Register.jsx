@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import ProtectedRoute from "../config/ProtectedRoute";
 
-export default function Register({ authType, setAuthType, setLoginInfo }) {
+export default function Register({
+  authType,
+  setAuthType,
+  setLoginInfo,
+  createFirebaseUser,
+}) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     passwordRepeat: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,19 +23,21 @@ export default function Register({ authType, setAuthType, setLoginInfo }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
-    if (validateForm()) {
-      console.log("Form Submitted Successfully:", formData);
-      setLoginInfo({
-        email: formData.email,
-        password: formData.password,
-      });
-      // Add API call logic here
-    } else {
-      console.log("Form submission failed due to validation errors.");
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const user = await createFirebaseUser(formData.email, formData.password);
+
+      console.log("Registered:", user);
+
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error(error);
     }
   };
 

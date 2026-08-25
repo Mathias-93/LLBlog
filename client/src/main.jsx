@@ -6,13 +6,24 @@ import App from "./App.jsx";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import Auth from "./routes/Auth.jsx";
+import ProtectedRoute from "./config/ProtectedRoute.jsx";
+import Dashboard from "./routes/Dashboard.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<App />} />
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 );
