@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Login from "./components/Login";
 import Auth from "./routes/Auth";
 
 function App() {

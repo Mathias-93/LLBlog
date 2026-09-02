@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { loginFirebaseUser } from "../config/firebase";
+import { useNavigate } from "react-router";
 
 export default function Login({ authType, setAuthType }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [loginInfo, setLoginInfo] = useState({
-    email: "",
-    password: "",
-  });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,16 +18,12 @@ export default function Login({ authType, setAuthType }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log("Form Submitted Successfully:", formData);
-      setLoginInfo({
-        email: formData.email,
-        password: formData.password,
-      });
-      // Add API call logic here
+      await loginFirebaseUser(formData.email, formData.password);
+      navigate("/dashboard", { replace: true });
     } else {
       console.log("Form submission failed due to validation errors.");
     }

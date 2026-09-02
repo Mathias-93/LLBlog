@@ -26,9 +26,7 @@ export default function Register({ setAuthType, createFirebaseUser }) {
     }
 
     try {
-      const user = await createFirebaseUser(formData.email, formData.password);
-
-      console.log("Registered:", user);
+      await createFirebaseUser(formData.email, formData.password);
 
       navigate("/dashboard", { replace: true });
     } catch (error) {
