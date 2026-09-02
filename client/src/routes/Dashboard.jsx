@@ -1,8 +1,33 @@
 import React from "react";
 import { logoutFirebaseUser } from "../config/firebase";
 import { useNavigate } from "react-router";
+import { ActivityCalendar } from "react-activity-calendar";
 
 export default function Dashboard() {
+  const generateData = () => {
+    const data = [];
+    const today = new Date();
+    const startDate = new Date();
+
+    startDate.setFullYear(today.getFullYear() - 1);
+
+    const currentDate = new Date(startDate);
+
+    while (currentDate <= today) {
+      data.push({
+        date: currentDate.toISOString().split("T")[0],
+        count: 0,
+        level: 0,
+      });
+
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return data;
+  };
+
+  const data = generateData();
+
   const logoutUser = async () => {
     try {
       await logoutFirebaseUser();
@@ -12,11 +37,44 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
-      <div>
-        <h2>Dashboard</h2>
-        <button onClick={logoutUser}>Logout</button>
+    <main className="bg-linear-to-b from-slate-800 via-slate-900 to-slate-950 w-screen h-screen flex flex-col p-10 align-middle items-center gap-4">
+      <header className="w-full h-1/10 flex justify-between">
+        <h2 className="text-5xl text-violet-300">LLBlog Dashboard</h2>
+
+        <button
+          className="text-slate-200 h-12 bg-slate-700 px-5 py-2 rounded-sm hover:bg-slate-500 cursor-pointer shadow-md"
+          onClick={logoutUser}
+        >
+          Logout
+        </button>
+      </header>
+      <div className="w-full h-full p-2 flex flex-col justify-center items-center gap-5">
+        <div className="w-full h-2/3 flex justify-center items-center gap-5">
+          <div className="w-2/5 h-full bg-slate-800 flex flex-col rounded-md">
+            <h3 className="text-3xl text-slate-200 text-center p-2">History</h3>
+            <div className="w-full h-full"></div>
+          </div>
+          <div className="w-2/5 h-full bg-slate-800 flex flex-col rounded-md cursor-pointer hover:transition-transform duration-200 hover:scale-102 hover:shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+            <h3 className="text-3xl text-slate-200 text-center p-2">
+              New post
+            </h3>
+            <div className="w-full h-full"></div>
+          </div>
+        </div>
+        <div className="w-4/5 h-1/3 bg-slate-800 flex flex-col justify-center items-center rounded-md p-3">
+          <h3 className="text-3xl text-slate-200 text-center p-2">History</h3>
+          <ActivityCalendar
+            data={data}
+            minLevel={0}
+            maxLevel={4}
+            theme={{
+              light: ["grey", "hsl(0, 0%, 92%)", "purple"],
+              dark: ["grey", "hsl(0, 0%, 92%)", "purple"],
+            }}
+          />
+          <div className="w-full h-full"></div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
