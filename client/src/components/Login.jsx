@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router";
 
-export default function Login({ authType, setAuthType, setLoginInfo }) {
+export default function Login({ authType, setAuthType }) {
   const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
   });

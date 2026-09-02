@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import ProtectedRoute from "../config/ProtectedRoute";
 
-export default function Register({
-  authType,
-  setAuthType,
-  setLoginInfo,
-  createFirebaseUser,
-}) {
+export default function Register({ setAuthType, createFirebaseUser }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",

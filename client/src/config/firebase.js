@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 
-const createFirebaseUser = async (email, password) => {
+export const createFirebaseUser = async (email, password) => {
   const userCredentials = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -30,17 +30,15 @@ const createFirebaseUser = async (email, password) => {
   return userCredentials.user;
 };
 
-const loginFirebaseUser = async (email, password) => {
+export const loginFirebaseUser = async (email, password) => {
   const userCredentials = await signInWithEmailAndPassword(
     auth,
     email,
-    passowrd,
+    password,
   );
   return userCredentials.user;
 };
 
-const logoutFirebaseUser = async () => {
+export const logoutFirebaseUser = async () => {
   await signOut(auth);
 };
-
-export default { createFirebaseUser, loginFirebaseUser, logoutFirebaseUser };
