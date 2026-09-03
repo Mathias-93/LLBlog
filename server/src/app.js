@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./config/firebase");
+const postsRouter = require("./routes/routes.js");
 
 const app = express();
 
@@ -13,25 +14,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.get("/api/test-db", async (req, res) => {
-  try {
-    const docRef = await db.collection("test").add({
-      message: "Hello Firestore",
-      createdAt: new Date(),
-    });
-
-    res.status(201).json({
-      id: docRef.id,
-      message: "Document created",
-    });
-  } catch (error) {
-    console.error("Error: " + error);
-
-    res.status(500).json({
-      error: "Could not connect to Firestore",
-    });
-  }
-});
+app.use("/api/posts", postsRouter);
 
 const PORT = process.env.port || 3000;
 

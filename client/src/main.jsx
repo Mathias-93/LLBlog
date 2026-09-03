@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import ProtectedRoute from "./config/ProtectedRoute.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import BlogPost from "./components/BlogPost.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")).render(
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/blogpost/:postId" element={<BlogPost />} />
           </Route>
         </Routes>
       </AuthProvider>
