@@ -1,18 +1,42 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { Tiptap } from "@tiptap/react";
 import BlogEditor from "./BlogEditor";
 
 export default function BlogPost() {
   const { postId } = useParams();
-  const { logoutUser } = useAuth();
+  const { currentUser, logoutUser } = useAuth();
+
+  const [post, setPost] = useState({
+    title: "",
+    content: "",
+    language: "",
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = await currentUser.getIdToken();
+    console.log(postId);
+
     try {
-      // API call here
-      console.log(e.target.value);
+      const response = await fetch(
+        `http://localhost:3000/api/posts/${postId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(post),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update post");
+      }
+
+      console.log(post);
     } catch (error) {
       console.log(error.message);
     }
@@ -32,7 +56,10 @@ export default function BlogPost() {
       </header>
       <div className="w-full h-full p-2 flex flex-col justify-center items-center gap-5">
         <form className="w-2/3 h-full" onSubmit={handleSubmit}>
-          <BlogEditor />
+          <BlogEditor
+            content={post.content}
+            onChange={(html) => setPost((prev) => ({ ...prev, content: html }))}
+          />
           <button
             type="submit"
             className="text-slate-200 bg-slate-700 px-5 py-2 rounded-sm hover:bg-slate-500 cursor-pointer shadow-md"
